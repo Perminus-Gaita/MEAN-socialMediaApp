@@ -1,0 +1,18 @@
+<div class="containerc">
+        <router-outlet></router-outlet>
+</div>
+<div class="containerb">
+    <div class="user-name">
+        <h2 *ngIf="user"> {{user.username}}</h2>
+    </div>
+    <div class="choices">
+        <a [routerLink]="['/', 'profile', 'edit', user._id ]" >Change your informations </a>
+    </div>
+    <div class="choices">
+        <a [routerLink]="['/', 'profile', 'edit', user._id, 'password']" >Change password</a>
+    </div>
+    <div class="choices">
+        <a href="#" >Change settings</a>
+     </div>
+     
+</div>

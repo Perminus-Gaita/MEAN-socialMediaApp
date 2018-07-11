@@ -1,0 +1,10 @@
+<nav class="navbar" id="navbara">
+  <div class="container-fluid"> 
+    <ul class="nav navbar-nav">
+      <li *ngIf="user" [routerLinkActive]="['active']"><a [routerLink]="['/', 'profile']" >{{user.username}}</a></li>
+      <li *ngIf="user" [routerLinkActive]="['active']"><a [routerLink]="[ user._id, 'myphotos']" *ngIf="_authService.loggedIn()">My Photos</a></li>
+      <li *ngIf="user" [routerLinkActive]="['active']"><a [routerLink]="['edit', user._id]" >Settings</a></li>
+      <li *ngIf="user" [routerLinkActive]="['active']"><a [routerLink]="[ user._id, 'notifications']" *ngIf="_authService.loggedIn()">Notifications</a></li>
+    </ul>
+  </div>
+</nav>

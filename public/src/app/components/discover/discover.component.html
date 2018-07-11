@@ -1,0 +1,178 @@
+<!-- SHARE BACKGROUND -->
+<div style="width: 70%; background: rgb(255, 255, 255); padding-bottom: 200px; padding-top: 0px; margin-left: 200px;">
+     
+   
+  
+    <div *ngIf='numb > 0' (click)='getAllShares()' style="width: 660px; text-align: center; padding-top: 30px; padding-bottom: 30px; background: rgb(155, 201, 223); border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195); margin-left: 50px; margin-top: 5px; padding-left: 30px; padding-right: 30px;"> {{numb}} new <span *ngIf='numb === 1'>post</span> <span *ngIf='numb > 1'> posts</span></div>
+     <!-- Main Share Window -->
+    <div *ngFor="let share of shares">
+
+        <div   style="width: 660px; padding-top: 30px; background: rgb(242, 244, 245);; border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195); margin-left: 50px; margin-top: 5px; padding-left: 30px; padding-right: 30px;">
+            
+            <div class="a" (click)="displayReplies(share)" style="width: 520px; margin-left: 100px; height: 50px; position: absolute; margin-top:-20px;" >
+
+            </div>
+            <!-- Profile Photo Box -->
+
+            <div  class="a"  style=" width: 30px; height: 30px; display: inline-block; margin-top: 30px; position: absolute;">
+                <img *ngIf='!share.user.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+                <img *ngIf='share.user.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="{{share.user.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+            </div>
+            <!-- Second Share box -->
+
+            <div style="width: 540px;  display: inline-block;  margin-left: 50px; ">
+                <!-- UserName Window -->
+                <div class="a" style=" width: 100px; height:30px;" (mouseleave) ="mouseLeave()">
+                    <h3 *ngIf='share.user' class="a" (mouseenter) ="mouseEnter(share) " style="font-size: 15px; color: rgb(19, 18, 18);  margin-left: 5px; font-weight: bold; " >{{share.user.username}}</h3>
+                    
+                    <!-- Profile popup window -->
+
+                    <div *ngIf='profileShow[share._id]' class="profile-display" (mouseleave) ="mouseLeave()" style="z-index: 4;">
+                        <div class="text-center">
+                            <img *ngIf='!share.user.ProfilePhoto'style=" width:50px; height: 50px;"  src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+                            <img *ngIf='share.user.ProfilePhoto'style=" width:50px; height: 50px;"  src="{{share.user.ProfilePhoto}}" class="avatar img-circle" alt="avatar">            
+                        </div>
+                        <div class="header1">
+                            <h1  style="font-size: 20px; font-weight: bold;">{{share.user.username}}</h1>                
+                        </div>
+                        <div class="info1">
+                            <p *ngIf="share.user"><span *ngIf='!share.user.info'>about</span>{{share.user.info}}</p>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                <!-- ShareBox -->
+            
+                    <div (click)="imgToShow(share)" *ngIf='share.urla' style="width: 640px; height: 300px; overflow: hidden; padding-left: 80px;" class="a">
+                        <img id="myImg" class="{{share.imageclass}}" src="{{share.urla}}" style="width: 350px; margin-top: 5px; margin-bottom: 15px;" alt="{{share.comment}}" >
+                    </div>
+                
+                    <div *ngIf='share.user' class="a" style="margin-top: 20px;" (click)="displayReplies(share)">
+                        <p class="a" style="margin-left: 20px;">{{share.comment}}</p>
+                        <p class="date">{{ stringAsDate(share.createdAt) | date:'dd MM yy - HH:mm:ss' }}</p>
+                    </div>
+        
+            </div>
+        </div>
+                <!-- Action Box -->
+        <div   *ngIf='share.user' style="width: 660px; height:50px;margin-top: 0px; padding-bottom: 20px;  margin-left:50px;  background: rgb(242, 244, 245);;" >
+                <div *ngIf='infoDisp[share._id]' class="infdsplay">
+                    <p>{{content}}</p>
+                </div>
+                <div (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('like', share)"  style="display: inline-block; position: absolute; margin-left: 300px;" >
+                    <span class="btn"><i class="fa fa-heart blue"></i> </span><span style="margin-left: 10px;">{{share.likes.length}}</span>
+                </div>
+                
+                <div (mouseenter) ="displayMeaning('reply', share)"  (mouseleave)="displayMea()" style="display: inline-block; position: absolute; margin-left: 50px;">
+                    <span class="fa fa-commenting-o btn"  style="font-size: 24px; margin-left: 30px; color: rgb(86, 201, 230); z-index: 1;"></span>
+                </div>
+                <div  style="position: absolute; margin-left: 120px; ">
+                    <span class="btn" >{{share.replies.length}}</span>
+                </div>
+         
+           
+            
+        </div>
+    </div>
+  
+</div>
+
+<div style="width: 50%; height: 300px; background: rgb(255, 255, 255); margin-left: 400px;">
+
+</div>
+<!-- Image display -->
+
+<div *ngIf="selectedImg"id="myModal" (click)="selectedImgNull()" class="modal">
+    <img class="modal-content {{selectedImg.imageclass}}" id="img01" src="{{selectedImg.urla}}">
+    <div class="a" id="caption"><h3  style="font-size: 25px; color: rgb(245, 244, 244);  margin-left: 5px; " >{{selectedImg.user.username}}</h3><p style="color: rgb(77, 75, 75); ">{{selectedImg.comment}}</p></div>
+</div>
+
+<!-- Share and Replies display -->
+
+<div *ngIf="displayrepliesOfShare" class="modal1" >
+    <span  (click)="removeReplyBox()" style="font-size: 40px; margin-left: 900px; position: fixed; margin-top: -20px;"><i class="fa fa-close"></i></span>
+        
+    <div  class="modal-content1" style="min-height: 500px; padding-left: 100px; padding-top: 30px; padding-bottom: 100px; z-index: 2; background: rgb(242, 244, 245); border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195);  margin-top: 5px;  padding-right: 30px;  margin-left: 350px;">
+        <div   style=" width: 30px; height: 30px; display: inline-block; margin-top: 30px; position: absolute; margin-left: -50px;">
+            <img *ngIf='!displayrepliesOfShare.user.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+            <img *ngIf='displayrepliesOfShare.user.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="{{displayrepliesOfShare.user.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+        </div>
+        <div style=" width: 100px; height:30px; margin-left: -60px;">
+            <h3  style="font-size: 15px; color: rgb(19, 18, 18);  margin-left: 50px; font-weight: bold; " >{{displayrepliesOfShare.user.username}}</h3>
+           
+            
+        </div>
+        <div>
+            <div  *ngIf='displayrepliesOfShare.urla' style="width: 440px;  ">
+                <img id="myImg" class="{{displayrepliesOfShare.imageclass}}" src="{{displayrepliesOfShare.urla}}" style="width: 350px; margin-top: 5px; margin-bottom: 15px;"  >
+            </div>
+            
+            <div style="margin-top: 20px; width: 350px;">
+                <p style="margin-left: 20px;">{{displayrepliesOfShare.comment}}</p>
+                <p class="date">{{ stringAsDate(displayrepliesOfShare.createdAt) | date:'dd MM yy - HH:mm:ss' }}</p>
+            </div>
+        </div>
+        <div style="border: 1px solid grey; margin-top: 40px; width: 520px; margin-left: -90px;"></div>
+        <div style="width: 400px; height:50px;margin-top:20px; padding-bottom: 20px;  margin-left:-30px;  background: rgb(242, 244, 245); border: 1px solid rgb(242, 244, 245);" >
+                <div *ngIf='infoDisp[displayrepliesOfShare._id]' class="infdsplay">
+                    <p>{{content}}</p>
+                </div>
+                <div (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('like', displayrepliesOfShare)"  style="display: inline-block; position: absolute; margin-left: 200px;" >
+                    <span class="btn"><i class="fa fa-heart blue"></i> </span><span (click)="displayWhoLikes(displayrepliesOfShare)" class="btn" style="margin-left: 10px; color: blue;">{{displayrepliesOfShare.likes.length}} likes</span>
+                 </div>
+             
+                
+                <div  style="position: absolute; margin-left: 70px; ">
+                    <span  >{{displayrepliesOfShare.replies.length}} comments</span>
+                </div>
+         
+         
+            
+        </div>
+
+        <div style="border: 1px solid grey; margin-top: 110px; width: 520px; margin-left: -90px;"></div>
+
+        <!-- Replies -->
+
+        <div *ngFor='let reply of displayrepliesOfShare.replies'>
+            <p style="margin-top: 30px;"><span  class="btn" style="color: rgb(61, 137, 236);">{{reply.commentor.username}} :</span> {{reply.content}}</p><br>
+            <p class="date">{{ stringAsDate(reply.createdAt) | date:'dd MM yy - HH:mm:ss' }}</p>
+            <div *ngIf='infoDisp[reply._id]' class="infdsplay">
+                <p>{{content}}</p>
+
+            </div>
+            <!-- Action box -->
+            <div (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('like', reply)"  style="display: inline-block; position: absolute; margin-left: 200px;" >
+                <span  class="btn"><i class="fa fa-heart blue"></i> </span><span (click)="displayWhoLikes(reply)"style="margin-left: 10px; color: blue;" class="btn">{{reply.likes.length}} likes</span>
+             </div>
+            
+
+            <div style="border: 1px solid rgb(163, 162, 162); margin-top: 110px; width: 440px; margin-left: -50px;"></div>
+        </div>
+        
+    </div>
+
+</div>
+
+<!-- Likes display  -->
+
+<div *ngIf="wholeLikes" class="modal1">
+        <span  (click)="removeLikesBox()" style="font-size: 40px; margin-left: 900px; position: fixed; margin-top: -20px;"><i class="fa fa-close"></i></span>
+       <div *ngIf='wholeLikes' class="modal-content1" style="min-height: 500px; padding-left: 50px; padding-top: 30px; padding-bottom: 100px; background: rgb(242, 244, 245); border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195);  margin-top: 5px;  padding-right: 30px;  margin-left: 350px; z-index: 5;" >
+            <div *ngFor='let liker of wholeLikes.likes'>
+                <div style="border-top: 1px solid rgb(53, 53, 53); border-bottom: 1px solid rgb(53, 53, 53); padding-top: 20px; padding-bottom: 20px;">
+                        <div  style=" width: 30px; height: 30px; display: inline-block; margin-top: 30px; position: absolute;">
+                        <img *ngIf='!liker.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+                        <img *ngIf='liker.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="{{liker.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+                    </div>
+                    <h3  style="font-size: 15px; color: rgb(19, 18, 18);  margin-left: 50px; font-weight: bold; " >{{liker.username}}</h3>
+                   
+                </div>
+                
+            </div>    
+           
+       </div>
+</div>
+
+

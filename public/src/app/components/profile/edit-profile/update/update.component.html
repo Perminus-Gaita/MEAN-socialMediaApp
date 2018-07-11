@@ -1,0 +1,84 @@
+<div class="container">
+  <h1>Edit Profile</h1>
+  <hr>
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-3">
+      <div class="text-center">
+          <img *ngIf='!user.ProfilePhoto'style=" width:150px; height: 150px;"  src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+          <img *ngIf='user.ProfilePhoto'style=" width:150px; height: 150px;"  src="{{user.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+          
+          <p>upload or replace your picture...</p>
+        <input type="file" class="form-control" (change)="onFileSelected($event)"><br>
+        <button  *ngIf="newUrl" (click)="onload()">Upload</button><br><br>
+        <!-- <button *ngIf='user.pictures'   (click)="onloadChange()">Change photo</button><br><br> -->
+        <!-- <p>{{show}} your location:</p> <button (click)="locationchange()">{{check}}</button> -->
+      </div>
+    </div>
+    
+    <!-- edit form column -->
+    <div class="col-md-8 personal-info">
+      <div class="alert alert-info alert-dismissable">
+        <a class="panel-close close" data-dismiss="alert">×</a> 
+        <i class="fa fa-coffee"></i>
+        <flash-messages></flash-messages>
+       </div>
+      <h3>Personal info</h3>
+      
+      <form class="form-horizontal" role="form" (submit)="onUpdateSubmit()">
+        <div class="form-group">
+          <label class="col-lg-3 control-label">First name:</label>
+          <div class="col-lg-8">
+            <input *ngIf="user" class="form-control" type="text" name="user.first_name" [(ngModel)]="user.first_name" >
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-lg-3 control-label">Last name:</label>
+          <div class="col-lg-8">
+            <input *ngIf="user"  class="form-control" type="text" name="user.last_name" [(ngModel)]="user.last_name" >
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-lg-3 control-label">Username:</label>
+          <div class="col-lg-8">
+            <input *ngIf="user"  class="form-control" type="text" name="user.username" [(ngModel)]="user.username">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-lg-3 control-label">Email:</label>
+          <div class="col-lg-8">
+            <input *ngIf="user"  class="form-control" type="text" name="user.email" [(ngModel)]="user.email" >
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-lg-3 control-label">Info:</label>
+          <div class="col-lg-8">
+            <textarea *ngIf="user"  class="form-control" type="text" name="user.info" [(ngModel)]="user.info" >{{user.info}}</textarea>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="col-md-3 control-label">Password:</label>
+          <div class="col-md-8">
+            <input class="form-control" type="password" name="password" [(ngModel)]="password">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">Confirm password:</label>
+          <div class="col-md-8">
+            <input class="form-control" type="password" name="confirm_password" [(ngModel)]="confirm_password">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label"></label>
+          <div class="col-md-8">
+            <input type="submit" class="btn btn-primary" value="Save Changes">
+            <span></span><br><br>
+            <button type="reset" class="btn btn-default" (click)="reset()" value="Cancel">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+</div>
+<hr>

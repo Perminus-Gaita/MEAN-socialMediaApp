@@ -1,0 +1,355 @@
+<div class="loader" *ngIf='loading' style="position: fixed; margin-left: 500px; margin-top: -50px; z-index: 2; font-size: 10px;"></div>
+
+<div *ngIf="myFollowers" class="modal1">
+        <span  (click)="removeFollowersBox()" style="font-size: 40px; margin-left: 900px; position: fixed; margin-top: -20px;"><i class="fa fa-close"></i></span>
+       <div *ngIf="user" class="modal-content1" style="min-height: 500px; padding-left: 50px; padding-top: 30px; padding-bottom: 100px; background: rgb(242, 244, 245); border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195);  margin-top: 5px;  padding-right: 30px;  margin-left: 350px; z-index: 5;" >
+            <div *ngFor='let follower of myFollowers.followers'>
+                <div style="border-top: 1px solid rgb(53, 53, 53); border-bottom: 1px solid rgb(53, 53, 53); padding-top: 20px; padding-bottom: 20px;">
+                        <div  [routerLink]="['/profile', follower._id]" style=" width: 30px; height: 30px; display: inline-block; margin-top: 30px; position: absolute;">
+                        <img *ngIf='!follower.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+                        <img *ngIf='follower.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="{{follower.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+                    </div>
+                    <h3  style="font-size: 15px; color: rgb(19, 18, 18);  margin-left: 50px; font-weight: bold; " [routerLink]="['/profile', follower._id]">{{follower.username}}</h3>
+                    
+                            <span *ngIf="!follower.followers.includes(user._id)" class="btn"  style="position: absolute; margin-top: -40px; margin-left: 350px; z-index: 5;"><i (click)="onclickletsFollow(follower)">  Follow</i> </span>
+                            <span *ngIf="follower.followers.includes(user._id)" class="btn" style="position: absolute; margin-top: -40px; margin-left: 350px; background: rgb(178, 243, 178); z-index: 5;"> <i (click)="onclickletsUnfollow(follower)">  Following</i></span>
+                
+                </div>
+                
+            </div>    
+           
+       </div>
+</div>
+<div *ngIf="myFollowings" class="modal1">
+        <span  (click)="removeFollowersBox()" style="font-size: 40px; margin-left: 900px; position: fixed; margin-top: -20px;"><i class="fa fa-close"></i></span>
+       <div *ngIf="user" class="modal-content1" style="min-height: 500px; padding-left: 50px; padding-top: 30px; padding-bottom: 100px; background: rgb(242, 244, 245);; border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195);  margin-top: 5px;  padding-right: 30px;  margin-left: 350px; z-index: 5;" >
+            <div *ngFor='let follower of myFollowings.followings'>
+                <div style="border-top: 1px solid rgb(53, 53, 53); border-bottom: 1px solid rgb(53, 53, 53); padding-top: 20px; padding-bottom: 20px;">
+                        <div  [routerLink]="['/profile', follower._id]" style=" width: 30px; height: 30px; display: inline-block; margin-top: 30px; position: absolute;">
+                        <img *ngIf='!follower.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+                        <img *ngIf='follower.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="{{follower.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+                    </div>
+                    <h3  style="font-size: 15px; color: rgb(19, 18, 18);  margin-left: 50px; font-weight: bold; " [routerLink]="['/profile', follower._id]">{{follower.username}}</h3>
+                    
+                            <span *ngIf="!follower.followers.includes(user._id)" class="btn"  style="position: absolute; margin-top: -40px; margin-left: 350px; z-index: 5;"><i (click)="onclickletsFollow2(follower)">  Follow</i> </span>
+                            <span *ngIf="follower.followers.includes(user._id)" class="btn" style="position: absolute; margin-top: -40px; margin-left: 350px; background: rgb(178, 243, 178); z-index: 5;"> <i (click)="onclickletsUnfollow2(follower)">  Following</i></span>
+                
+                </div>
+                
+            </div>    
+           
+       </div>
+</div>
+<div class="containera" >
+  <div class="text-center" *ngIf='user' [routerLink]="['/profile']" >
+        <img *ngIf='!user.ProfilePhoto'style=" width:100px; height: 100px;"  src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+        <img *ngIf='user.ProfilePhoto'style=" width:100px; height: 100px;"  src="{{user.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+        
+    </div>
+    <div class="header" [routerLink]="['/profile']" >
+          <!-- <h1 *ngIf="user">{{user.first_name[0].toUpperCase()+user.first_name.slice(1)}} {{user.last_name[0].toUpperCase()+user.last_name.slice(1)}}</h1> -->
+          <h1 *ngIf="user" style="font-size: 20px;">{{user.username}}</h1>
+          
+    </div>
+    <div class="info" [routerLink]="['/profile']" >
+      <p *ngIf="user" style="font-size: 12px;"><span *ngIf='!user.info'>about </span>{{user.info}}</p>
+    </div>
+    <div *ngIf='user'  >
+        <h3 style="font-size: 15px;" (click)="displayFollowers(user)" >Followers : {{user.followers.length}}</h3>
+        <h3 style="font-size: 15px;" (click)="displayFollowings(user)">Following : {{user.followings.length}}</h3>
+        <h3 style="font-size: 15px;" *ngIf='myshares' (click)="getShares('my_shares')">Posts : {{myshares.length}}</h3>
+    </div>
+</div >
+<div style="padding: 50px; position: fixed; margin-top: 300px;">
+    <button *ngIf="_bests || my_shares" style="background: rgb(150, 205, 241); color: white;" (click)="getShares('my_dashboard')"> My Dashboard</button>
+    <button *ngIf='my_dashboard' style="background: rgb(150, 208, 241); color: white;" (click)="getShares('_bests')">Discover</button>
+</div>
+
+<!-- follow recommendations -->
+<div  class="follow-req">
+    <div  style="min-height: 500px; padding-left: 10px; padding-right: 10px;  border-bottom: 1px solid rgb(94, 93, 93); border-top: 1px solid rgb(94, 93, 93); " >
+        <h4>Who to follow</h4>
+        <div *ngFor='let userz of users2'>
+            <div style="border-top: 1px solid rgb(53, 53, 53); border-bottom: 1px solid rgb(53, 53, 53); padding-top: 20px; padding-bottom: 20px;">
+                <div class="a"  [routerLink]="['/profile', userz._id]" style=" width: 30px; height: 30px; display: inline-block; margin-top: 30px; position: absolute;">
+                    <img *ngIf='!userz.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+                    <img *ngIf='userz.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="{{userz.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+                </div>
+                     <h3 class="btn"  style="font-size: 15px; color: rgb(19, 18, 18);  margin-left: 30px; font-weight: bold; margin-top: -10px; " [routerLink]="['/profile', userz._id]">{{userz.username}}</h3>
+                     <div *ngIf='user._id != userz._id'>
+                        <span  class="btn"  style="margin-left: 50px; z-index: 5; border: 1px solid rgb(197, 195, 195);"><i (click)="onclickletsFollowFromHere(userz)">  Follow</i> </span>
+                        
+                    </div>
+            </div>
+                 
+        </div>    
+            
+    </div>
+</div>
+<!-- SHARE BACKGROUND -->
+<div style="width: 70%; background: rgb(255, 255, 255); padding-bottom: 200px; padding-top: 0px; margin-left: 200px;">
+     
+   
+    <div style="width: 660px;   margin-left: 20px;   padding-left: 30px; padding-right: 30px;">
+        <div style="width: 660px;  background: rgb(242, 244, 245); border: 20px solid rgb(242, 244, 245);;">
+            <button *ngIf="newUrl1" (click)="removeNewURl1(img)"><i class="fa fa-close"></i></button>
+          <img *ngIf="newUrl1" class="{{imageClass}}" style=" width:100px; "  src="{{newUrl1}}" >
+          <form class="form-horizontal" role="form" (submit)="onshareSubmit()" style="margin-top: 10px;">
+              <textarea *ngIf="user"  class="form-control" type="textarea" name="comment" [(ngModel)]="comment" placeholder="{{message}}" style="border: 1px solid rgb(80, 78, 78);" ></textarea>
+              <input type="submit" class="btn btn-primary" value="Post" style="margin-top:20px; margin-left: 550px; position: absolute; ">
+          </form>
+          <input style="display: none;" #fileInput type="file" class="form-control" (change)="onFileSelected($event)"><br>
+          <button type="button" (click)="fileInput.click()"><i class="material-icons" style="font-size: 15px;">add_a_photo</i></button>
+          <button type="button"   *ngIf="picture" (click)="onload()"  >upload</button>
+          
+        </div>
+    </div>
+    <div *ngIf='numb > 0' (click)='getAllShares()' style="width: 660px; text-align: center; padding-top: 30px; padding-bottom: 30px; background: rgb(155, 201, 223); border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195); margin-left: 50px; margin-top: 5px; padding-left: 30px; padding-right: 30px;"> {{numb}} new <span *ngIf='numb === 1'>post</span> <span *ngIf='numb > 1'> posts</span></div>
+     <!-- Main Share Window -->
+    <div *ngFor="let share of shares">
+
+        <div   style="width: 660px; padding-top: 30px; background: rgb(242, 244, 245);; border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195); margin-left: 50px; margin-top: 5px; padding-left: 30px; padding-right: 30px;">
+            
+            <div class="a" (click)="displayReplies(share)" style="width: 520px; margin-left: 100px; height: 50px; position: absolute; margin-top:-20px;" >
+
+            </div>
+            <!-- Profile Photo Box -->
+
+            <div  class="a" [routerLink]="['/profile', share.user._id]" style=" width: 30px; height: 30px; display: inline-block; margin-top: 30px; position: absolute;">
+                <img *ngIf='!share.user.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+                <img *ngIf='share.user.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="{{share.user.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+            </div>
+            <!-- Second Share box -->
+
+            <div style="width: 540px;  display: inline-block;  margin-left: 50px; ">
+                <!-- UserName Window -->
+                <div class="a" style=" width: 100px; height:30px;" (mouseleave) ="mouseLeave()">
+                    <h3 class="a" (mouseenter) ="mouseEnter(share) " style="font-size: 15px; color: rgb(19, 18, 18);  margin-left: 5px; font-weight: bold; " [routerLink]="['/profile', share.user._id]">{{share.user.username}}</h3>
+                    
+                    <!-- Profile popup window -->
+
+                    <div *ngIf='profileShow[share._id]' class="profile-display" (mouseleave) ="mouseLeave()" style="z-index: 4;">
+                        <div class="text-center"[routerLink]="['/profile',share.user._id]">
+                            <img *ngIf='!share.user.ProfilePhoto'style=" width:50px; height: 50px;"  src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+                            <img *ngIf='share.user.ProfilePhoto'style=" width:50px; height: 50px;"  src="{{share.user.ProfilePhoto}}" class="avatar img-circle" alt="avatar">            
+                        </div>
+                        <div class="header1"[routerLink]="['/profile',share.user._id]">
+                            <h1 *ngIf="user" style="font-size: 20px; font-weight: bold;">{{share.user.username}}</h1>                
+                        </div>
+                        <div class="info1"[routerLink]="['/profile',share.user._id]">
+                            <p *ngIf="share.user"><span *ngIf='!share.user.info'>about</span>{{share.user.info}}</p>
+                        </div>
+                        <div *ngIf='user._id != share.user._id'  style="position: absolute; margin-top:3px;  z-index: 4;">
+                            <button *ngIf="!share.user.followers.includes(user._id)" (click)="onFollow2(share)" style="z-index: 4;" >Follow</button>
+                            <button *ngIf="share.user.followers.includes(user._id)" (click)="onUnFollow2(share)" style=" background: rgb(178, 243, 178);">Following</button>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- ShareBox -->
+            
+                    <div (click)="imgToShow(share)" *ngIf='share.urla' style="width: 640px; height: 300px; overflow: hidden; padding-left: 80px;" class="a">
+                        <img id="myImg" class="{{share.imageclass}}" src="{{share.urla}}" style="width: 350px; margin-top: 5px; margin-bottom: 15px;" alt="{{share.comment}}" >
+                    </div>
+                
+                    <div class="a" style="margin-top: 20px;" (click)="displayReplies(share)">
+                        <p class="a" style="margin-left: 20px;">{{share.comment}}</p>
+                        <p class="date">{{ stringAsDate(share.createdAt) | date:'dd MM yy - HH:mm:ss' }}</p>
+                    </div>
+        
+            </div>
+        </div>
+                <!-- Action Box -->
+        <div style="width: 660px; height:50px;margin-top: 0px; padding-bottom: 20px;  margin-left:50px;  background: rgb(242, 244, 245);;" >
+                <div *ngIf='infoDisp[share._id]' class="infdsplay">
+                    <p>{{content}}</p>
+                </div>
+                <div (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('like', share)" (click)="onclickLike(share)" style="display: inline-block; position: absolute; margin-left: 300px;" >
+                    <span class="btn"><i class="fa fa-heart blue"></i> </span><span style="margin-left: 10px;">{{share.likes.length}}</span>
+                    <span *ngFor='let like of share.likes'><i *ngIf='like._id === user._id' class="fa fa-heart red btn" style="position: absolute; margin-left: -65px; margin-top: 0px;"></i></span>
+                </div>
+                <div *ngIf="user._id === share.user._id" (click)="deleteShare(share)"  style="display: inline-block; position: absolute; margin-left: 450px;" (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('delete', share)" >
+                    <p> <span class="btn" ><i class="fa fa-trash" style="color: rgb(53, 85, 121);"></i></span></p>
+                </div>
+                <div (mouseenter) ="displayMeaning('reply', share)" (click)="showaddComment(share)" (mouseleave)="displayMea()" style="display: inline-block; position: absolute; margin-left: 50px;">
+                    <span class="fa fa-commenting-o btn"  style="font-size: 24px; margin-left: 30px; color: rgb(86, 201, 230); z-index: 1;"></span>
+                </div>
+                <div  style="position: absolute; margin-left: 120px; ">
+                    <span class="btn" >{{share.replies.length}}</span>
+                </div>
+         
+            <div *ngIf="displayCommentbox[share._id]" style="margin-top: 0px; height:100%; width: 100%; margin-left: -30px; z-index: 5; position: absolute;" >
+                <div style="width: 400px;  background: rgb(242, 244, 245);; border: 20px solid rgb(242, 244, 245);; " class="comment-form">
+                    <span (click)="hideAddComment(share)"><i class="fa fa-close" style="font-size: 10px;"></i></span>
+                    <form class="form-horizontal" role="form" (submit)="onreplySubmit(share)">
+                        <textarea *ngIf="user"  class="form-control" type="textarea" name="comment" [(ngModel)]="reply" placeholder="{{message}}" style="width: 300px; min-height: 30px;"></textarea>
+                        <input type="submit" class="btn-primary" value="Reply" style="text-align: center;padding-left:-5px; padding-top: -5px; margin-top:-40px; width:40px; height: 20px; font-size: 10px; margin-left: 320px; position: absolute; background: green;">
+                    </form>        
+                </div>      
+            </div>
+            
+        </div>
+    </div>
+  
+</div>
+
+<div style="width: 50%; height: 300px; background: rgb(255, 255, 255); margin-left: 400px;">
+
+</div>
+<!-- Image display -->
+
+<div *ngIf="selectedImg"id="myModal" (click)="selectedImgNull()" class="modal">
+    <img class="modal-content {{selectedImg.imageclass}}" id="img01" src="{{selectedImg.urla}}">
+    <div class="a" id="caption"><h3  style="font-size: 25px; color: rgb(245, 244, 244);  margin-left: 5px; " [routerLink]="['/profile', selectedImg.user._id]">{{selectedImg.user.username}}</h3><p style="color: rgb(77, 75, 75); ">{{selectedImg.comment}}</p></div>
+</div>
+
+<!-- Share and Replies display -->
+
+<div *ngIf="displayrepliesOfShare" class="modal1" >
+    <span  (click)="removeReplyBox()" style="font-size: 40px; margin-left: 900px; position: fixed; margin-top: -20px;"><i class="fa fa-close"></i></span>
+        
+    <div *ngIf="user" class="modal-content1" style="min-height: 500px; padding-left: 100px; padding-top: 30px; padding-bottom: 100px; z-index: 2; background: rgb(242, 244, 245); border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195);  margin-top: 5px;  padding-right: 30px;  margin-left: 350px;">
+        <div  [routerLink]="['/profile', displayrepliesOfShare.user._id]" style=" width: 30px; height: 30px; display: inline-block; margin-top: 30px; position: absolute; margin-left: -50px;">
+            <img *ngIf='!displayrepliesOfShare.user.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+            <img *ngIf='displayrepliesOfShare.user.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="{{displayrepliesOfShare.user.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+        </div>
+        <div style=" width: 100px; height:30px; margin-left: -60px;">
+            <h3  style="font-size: 15px; color: rgb(19, 18, 18);  margin-left: 50px; font-weight: bold; " [routerLink]="['/profile', displayrepliesOfShare.user._id]">{{displayrepliesOfShare.user.username}}</h3>
+            <div *ngIf='user._id != displayrepliesOfShare.user._id'>
+                <button *ngIf="!displayrepliesOfShare.user.followers.includes(user._id)" (click)="onclickFollow1(displayrepliesOfShare)" style="position: absolute; margin-top: -40px; margin-left: 350px;">Follow</button>
+                <button *ngIf="displayrepliesOfShare.user.followers.includes(user._id)" (click)="onclickUnFollow1(displayrepliesOfShare)" style="position: absolute; margin-top: -40px; margin-left: 350px; background: rgb(178, 243, 178);">Following</button>
+            </div>
+            
+        </div>
+        <div>
+            <div  *ngIf='displayrepliesOfShare.urla' style="width: 440px;  ">
+                <img id="myImg" class="{{displayrepliesOfShare.imageclass}}" src="{{displayrepliesOfShare.urla}}" style="width: 350px; margin-top: 5px; margin-bottom: 15px;"  >
+            </div>
+            
+            <div style="margin-top: 20px; width: 350px;">
+                <p style="margin-left: 20px;">{{displayrepliesOfShare.comment}}</p>
+                <p class="date">{{ stringAsDate(displayrepliesOfShare.createdAt) | date:'dd MM yy - HH:mm:ss' }}</p>
+            </div>
+        </div>
+        <div style="border: 1px solid grey; margin-top: 40px; width: 520px; margin-left: -90px;"></div>
+        <div style="width: 400px; height:50px;margin-top:20px; padding-bottom: 20px;  margin-left:-30px;  background: rgb(242, 244, 245); border: 1px solid rgb(242, 244, 245);" >
+                <div *ngIf='infoDisp[displayrepliesOfShare._id]' class="infdsplay">
+                    <p>{{content}}</p>
+                </div>
+                <div (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('like', displayrepliesOfShare)"  style="display: inline-block; position: absolute; margin-left: 200px;" >
+                    <span class="btn"><i (click)="onclickLike1(displayrepliesOfShare)"class="fa fa-heart blue"></i> </span><span (click)="displayWhoLikes(displayrepliesOfShare)" class="btn" style="margin-left: 10px; color: blue;">{{displayrepliesOfShare.likes.length}} likes</span>
+                    <span *ngFor='let like of displayrepliesOfShare.likes'><i *ngIf='like._id === user._id' (click)="onclickLike1(displayrepliesOfShare)" class="fa fa-heart red btn" style="position: absolute; margin-left:-127px;"></i></span>
+                </div>
+                <div *ngIf="user._id === displayrepliesOfShare.user._id" (click)="deleteShare1(displayrepliesOfShare)"  style="display: inline-block; position: absolute; margin-left: 350px;" (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('delete', displayrepliesOfShare)" >
+                    <p> <span class="btn" ><i class="fa fa-trash" style="color: rgb(53, 85, 121);"></i></span></p>
+                </div>
+                
+                <div  style="position: absolute; margin-left: 70px; ">
+                    <span  >{{displayrepliesOfShare.replies.length}} comments</span>
+                </div>
+         
+            <div  style="margin-top: 60px; height:50px; margin-left: 0px; ">
+               
+                  
+                    <form class="form-horizontal" role="form" (submit)="onreplySubmit1(displayrepliesOfShare)">
+                        <textarea *ngIf="user"  class="form-control" type="textarea" name="comment" [(ngModel)]="reply" placeholder="{{message}}" style="width: 450px; min-height: 20px; margin-left: -50px;"></textarea>
+                        <input type="submit" class="btn-primary" value="Reply" style="text-align: center;padding-left:-5px; padding-top: -5px; margin-top:10px; width:40px; height: 20px; font-size: 10px; margin-left: 370px; position: absolute; background: green;">
+                    </form>        
+                    
+            </div>
+            
+        </div>
+
+        <div style="border: 1px solid grey; margin-top: 110px; width: 520px; margin-left: -90px;"></div>
+
+        <!-- Replies -->
+
+        <div *ngFor='let reply of displayrepliesOfShare.replies'>
+            <p style="margin-top: 30px;"><span [routerLink]="['/profile', reply.commentor._id]" class="btn" style="color: rgb(61, 137, 236);">{{reply.commentor.username}} :</span> {{reply.content}}</p><br>
+            <p class="date">{{ stringAsDate(reply.createdAt) | date:'dd MM yy - HH:mm:ss' }}</p>
+            <div *ngIf='infoDisp[reply._id]' class="infdsplay">
+                <p>{{content}}</p>
+
+            </div>
+            <!-- Action box -->
+            <div (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('like', reply)"  style="display: inline-block; position: absolute; margin-left: 200px;" >
+                <span (click)="onclickLikeReply(displayrepliesOfShare, reply)" class="btn"><i class="fa fa-heart blue"></i> </span><span (click)="displayWhoLikes(reply)"style="margin-left: 10px; color: blue;" class="btn">{{reply.likes.length}} likes</span>
+                <span *ngFor='let like of reply.likes'><i *ngIf='like._id === user._id' class="fa fa-heart red btn" style="position: absolute; margin-left:-127px; z-index: 5;" (click)="onclickLikeReply(displayrepliesOfShare, reply)"></i></span>
+            </div>
+            <div *ngIf="user._id === reply.commentor._id" (click)="deleteReply(displayrepliesOfShare, reply)"  style="display: inline-block; position: absolute; margin-left: 350px;" (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('delete', reply)" >
+                <p> <span class="btn" ><i class="fa fa-trash" style="color: rgb(53, 85, 121);"></i></span></p>
+            </div>
+
+            <div style="border: 1px solid rgb(163, 162, 162); margin-top: 110px; width: 440px; margin-left: -50px;"></div>
+        </div>
+        
+    </div>
+
+</div>
+
+<!-- Likes display  -->
+
+<div *ngIf="wholeLikes" class="modal1">
+        <span  (click)="removeLikesBox()" style="font-size: 40px; margin-left: 900px; position: fixed; margin-top: -20px;"><i class="fa fa-close"></i></span>
+       <div *ngIf="user" class="modal-content1" style="min-height: 500px; padding-left: 50px; padding-top: 30px; padding-bottom: 100px; background: rgb(242, 244, 245); border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195);  margin-top: 5px;  padding-right: 30px;  margin-left: 350px; z-index: 5;" >
+            <div *ngFor='let liker of wholeLikes.likes'>
+                <div style="border-top: 1px solid rgb(53, 53, 53); border-bottom: 1px solid rgb(53, 53, 53); padding-top: 20px; padding-bottom: 20px;">
+                        <div  [routerLink]="['/profile', liker._id]" style=" width: 30px; height: 30px; display: inline-block; margin-top: 30px; position: absolute;">
+                        <img *ngIf='!liker.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+                        <img *ngIf='liker.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="{{liker.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+                    </div>
+                    <h3  style="font-size: 15px; color: rgb(19, 18, 18);  margin-left: 50px; font-weight: bold; " [routerLink]="['/profile', liker._id]">{{liker.username}}</h3>
+                    <div *ngIf='user._id != liker._id'>
+                            <span *ngIf="!liker.followers.includes(user._id)" class="btn"  style="position: absolute; margin-top: -40px; margin-left: 350px; z-index: 5;"><i (click)="onclickletsFollow1(liker, wholeLikes)">  Follow</i> </span>
+                            <span *ngIf="liker.followers.includes(user._id)" class="btn" style="position: absolute; margin-top: -40px; margin-left: 350px; background: rgb(178, 243, 178); z-index: 5;"> <i (click)="onclickletsUnfollow1(liker, wholeLikes)">  Following</i></span>
+                </div>
+                </div>
+                
+            </div>    
+           
+       </div>
+</div>
+
+<!-- Image playground -->
+<div *ngIf="newUrl" class="modal1">
+    <div style="margin-left: 200px; display: block;">
+        <button *ngIf="newUrl" (click)="removeNewURl(img)"><i class="fa fa-close"></i></button>
+        <img class="{{normala}}" style=" width:400px; "  src="{{newUrl}}" >
+    </div>
+   <div style="width: 50px; display: inline-block; margin-left: 100px; margin-top: 50px;">
+        <img (click)="changeClass('normal')" class="blur" style=" width:50px; "  src="{{newUrl}}" >
+   </div>
+    <div style="width: 50px; display: inline-block; margin-left: 10px; margin-top: 50px;">
+        <img (click)="changeClass('blur')" class="blur" style=" width:50px; "  src="{{newUrl}}" >
+    </div>
+    <div style="width: 50px; display: inline-block; margin-left: 10px; margin-top: 50px;">
+        <img (click)="changeClass('brightness')" class="brightness" style=" width:50px; "  src="{{newUrl}}" >
+    </div>
+    <div style="width: 50px; display: inline-block; margin-left: 10px; margin-top: 50px;">
+        <img (click)="changeClass('contrast')" class="contrast" style=" width:50px; "  src="{{newUrl}}" >
+    </div >
+    <div style="width: 50px; display: inline-block; margin-left: 10px; margin-top: 50px;">
+        <img (click)="changeClass('grayscale')" class="grayscale" style=" width:50px; "  src="{{newUrl}}" >
+    </div>
+    <div style="width: 50px; display: inline-block; margin-left: 10px; margin-top: 50px;">
+        <img (click)="changeClass('huerotate')"  class="huerotate" style=" width:50px; "  src="{{newUrl}}" >
+    </div>
+    <div style="width: 50px; display: inline-block; margin-left: 10px; margin-top: 50px;">
+        <img (click)="changeClass('invert')" class="invert" style=" width:50px; "  src="{{newUrl}}" >
+    </div>
+    <div style="width: 50px; display: inline-block; margin-left: 10px; margin-top: 50px;">
+        <img (click)="changeClass('opacity')" class="opacity" style=" width:50px; "  src="{{newUrl}}" >
+    </div>
+    <div style="width: 50px; display: inline-block; margin-left: 10px; margin-top: 50px;">
+        <img (click)="changeClass('saturate')" class="saturate" style=" width:50px; "  src="{{newUrl}}" >
+    </div>
+   <div style="width: 50px; display: inline-block; margin-left: 10px; margin-top: 50px;">
+        <img (click)="changeClass('sepia')" class="sepia" style=" width:50px; "  src="{{newUrl}}" >
+   </div>
+    <div style="width: 50px; display: inline-block; margin-left: 10px; margin-top: 50px;">
+        <img (click)="changeClass('shadow')" class="shadow" style=" width: 50px; "  src="{{newUrl}}" >
+    </div>
+    
+    <button class="btn" (click)="addClass(normala)">Go</button>
+</div>
+

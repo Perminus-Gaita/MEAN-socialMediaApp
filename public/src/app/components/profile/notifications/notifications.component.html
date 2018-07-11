@@ -1,0 +1,154 @@
+<div *ngIf='notifications' style="background: rgb(242, 244, 245); width: 900px; margin-left: 100px; padding-top:20px; padding-bottom: 200px; ">
+    <div *ngIf='numb > 0' (click)='updateMyNots()' style="background: rgb(194, 221, 235); border: 1px solid rgb(192, 189, 189); width: 450px; margin-left: 200px; height: 50px; text-align: center;">
+      <p>{{numb}} new <span *ngIf='numb > 1'> notifications</span><span *ngIf='numb === 1'> notification</span></p>
+    </div>
+    <div *ngFor='let notification of notifications' (mouseleave) ="mouseLeave()">
+        <h4   style="margin-left: 100px; font-size: 15px; font-family: fantasy"><span class='btn' style="color: blue;" [routerLink]="['/profile', notification.executer._id]"  (mouseenter) ="mouseEnter(notification) " >{{notification.executer.username}}</span> {{notification.content}} :  <span style="color: blue; font-size: 10px;">{{ stringAsDate(notification.createdAt) | date:'dd MM yy - HH:mm:ss' }}</span></h4>
+        
+        <!-- Profile popup -->
+        <div *ngIf='profileShow[notification._id]' class="profile-display" (mouseleave) ="mouseLeave()" style="z-index: 4;">
+            <div class="text-center"[routerLink]="['/profile',notification.executer._id]">
+                <img *ngIf='!notification.executer.ProfilePhoto'style=" width:50px; height: 50px;"  src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+                <img *ngIf='notification.executer.ProfilePhoto'style=" width:50px; height: 50px;"  src="{{notification.executer.ProfilePhoto}}" class="avatar img-circle" alt="avatar">            
+            </div>
+            <div class="header1"[routerLink]="['/profile',notification.executer._id]">
+                <h1 *ngIf="user" style="font-size: 20px; font-weight: bold;">{{notification.executer.username}}</h1>                
+            </div>
+            <div class="info1"[routerLink]="['/profile',notification.executer._id]">
+                <p *ngIf="notification.executer"><span *ngIf='!notification.executer.info'>about</span>{{notification.executer.info}}</p>
+            </div>
+            <div *ngIf='user._id != notification.executer._id'  style="position: absolute; margin-top:3px;  z-index: 4;">
+                <button *ngIf="!notification.executer.followers.includes(user._id)" (click)="onFollow2(notification)" style="z-index: 4;" >Follow</button>
+                <button *ngIf="notification.executer.followers.includes(user._id)" (click)="onUnFollow2(notification)" style=" background: rgb(178, 243, 178);">Following</button>
+            </div>
+          </div>
+
+
+        <div *ngIf='notification.gottin'  class="a" (click)="displayReplies(notification.gottin._id)" style="width: 450px; height:200px; background:rgb(223, 237, 243); margin-left: 200px; margin-top: 20px; border: 1px solid rgb(211, 209, 209); ">
+            <h4 style="margin-left: 10px; font-size: 15px; font-family: fantasy; text-decoration: underline;">{{notification.gottin.user.username}}</h4>
+            <div style="width: 380px; height:100px; padding: 30px; border: 1px solid rgb(151, 150, 150); margin-left: 50px; ">
+              <p>{{notification.gottin.comment}}</p>
+              <p class="date" style="color: blue; font-size: 10px;">{{ stringAsDate(notification.gottin.createdAt) | date:'dd MM yy - HH:mm:ss' }}</p>
+            </div>
+        </div>
+        <div *ngIf='notification.reply' class="a" (click)="displayReplies(notification.reply.gottin)"  style="width: 450px; height:200px; background:rgb(223, 237, 243); margin-left: 200px; margin-top: 20px; border: 1px solid rgb(211, 209, 209); ">
+            <h4 style="margin-left: 10px; font-size: 15px; font-family: fantasy; text-decoration: underline;">{{notification.reply.commentor.username}}</h4>
+            <div style="width: 380px; height:100px; padding: 30px; border: 1px solid rgb(151, 150, 150); margin-left: 50px; ">
+                <p>{{notification.reply.content}}</p>
+                <p class="date" style="color: blue; font-size: 10px;">{{ stringAsDate(notification.reply.createdAt) | date:'dd MM yy - HH:mm:ss' }}</p>
+              </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--  -->
+
+<!-- Share and Replies display -->
+
+<div *ngIf="displayrepliesOfShare" class="modal1" >
+    <span  (click)="removeReplyBox()" style="font-size: 40px; margin-left: 900px; position: fixed; margin-top: -20px;"><i class="fa fa-close"></i></span>
+        
+    <div *ngIf="user" class="modal-content1" style="min-height: 500px; padding-left: 100px; padding-top: 30px; padding-bottom: 100px; z-index: 2; background: rgb(207, 232, 241); border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195);  margin-top: 5px;  padding-right: 30px;  margin-left: 350px;">
+        <div  [routerLink]="['/profile', displayrepliesOfShare.user._id]" style=" width: 30px; height: 30px; display: inline-block; margin-top: 30px; position: absolute; margin-left: -50px;">
+            <img *ngIf='!displayrepliesOfShare.user.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+            <img *ngIf='displayrepliesOfShare.user.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="{{displayrepliesOfShare.user.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+        </div>
+        <div style=" width: 100px; height:30px; margin-left: -60px;">
+            <h3  style="font-size: 15px; color: rgb(19, 18, 18);  margin-left: 50px; font-weight: bold; " [routerLink]="['/profile', displayrepliesOfShare.user._id]">{{displayrepliesOfShare.user.username}}</h3>
+            <div *ngIf='user._id != displayrepliesOfShare.user._id'>
+                <button *ngIf="!displayrepliesOfShare.user.followers.includes(user._id)" (click)="onclickFollow1(displayrepliesOfShare)" style="position: absolute; margin-top: -40px; margin-left: 350px;">Follow</button>
+                <button *ngIf="displayrepliesOfShare.user.followers.includes(user._id)" (click)="onclickUnFollow1(displayrepliesOfShare)" style="position: absolute; margin-top: -40px; margin-left: 350px; background: rgb(178, 243, 178);">Following</button>
+            </div>
+            
+        </div>
+        <div>
+            <div  *ngIf='displayrepliesOfShare.urla' style="width: 440px;  ">
+                <img id="myImg" class="{{displayrepliesOfShare.imageclass}}" src="{{displayrepliesOfShare.urla}}" style="width: 350px; margin-top: 5px; margin-bottom: 15px;"  >
+            </div>
+            
+            <div style="margin-top: 20px; width: 350px;">
+                <p style="margin-left: 20px;">{{displayrepliesOfShare.comment}}</p>
+                <p class="date">{{ stringAsDate(displayrepliesOfShare.createdAt) | date:'dd MM yy - HH:mm:ss' }}</p>
+            </div>
+        </div>
+        <div style="border: 1px solid grey; margin-top: 40px; width: 520px; margin-left: -90px;"></div>
+        <div style="width: 400px; height:50px;margin-top:20px; padding-bottom: 20px;  margin-left:-30px;  background: rgb(207, 232, 241); border: 1px solid rgb(207, 232, 241) ;" >
+                <div *ngIf='infoDisp[displayrepliesOfShare._id]' class="infdsplay">
+                    <p>{{content}}</p>
+                </div>
+                <div (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('like', displayrepliesOfShare)"  style="display: inline-block; position: absolute; margin-left: 200px;" >
+                    <span class="btn"><i (click)="onclickLike1(displayrepliesOfShare)"class="fa fa-heart blue"></i> </span><span (click)="displayWhoLikes(displayrepliesOfShare)" class="btn" style="margin-left: 10px; color: blue;">{{displayrepliesOfShare.likes.length}} likes</span>
+                    <span *ngFor='let like of displayrepliesOfShare.likes'><i *ngIf='like._id === user._id' (click)="onclickLike1(displayrepliesOfShare)" class="fa fa-heart red btn" style="position: absolute; margin-left:-127px;"></i></span>
+                </div>
+                <div *ngIf="user._id === displayrepliesOfShare.user._id" (click)="deleteShare1(displayrepliesOfShare)"  style="display: inline-block; position: absolute; margin-left: 350px;" (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('delete', displayrepliesOfShare)" >
+                    <p> <span class="btn" ><i class="fa fa-trash" style="color: rgb(53, 85, 121);"></i></span></p>
+                </div>
+                
+                <div  style="position: absolute; margin-left: 70px; ">
+                    <span  >{{displayrepliesOfShare.replies.length}} comments</span>
+                </div>
+         
+            <div  style="margin-top: 60px; height:50px; margin-left: 0px; ">
+               
+                  
+                    <form class="form-horizontal" role="form" (submit)="onreplySubmit1(displayrepliesOfShare)">
+                        <textarea *ngIf="user"  class="form-control" type="textarea" name="comment" [(ngModel)]="reply" placeholder="{{message}}" style="width: 450px; min-height: 20px; margin-left: -50px;"></textarea>
+                        <input type="submit" class="btn-primary" value="Reply" style="text-align: center;padding-left:-5px; padding-top: -5px; margin-top:10px; width:40px; height: 20px; font-size: 10px; margin-left: 370px; position: absolute; background: green;">
+                    </form>        
+                    
+            </div>
+            
+        </div>
+
+        <div style="border: 1px solid grey; margin-top: 110px; width: 520px; margin-left: -90px;"></div>
+
+        <!-- Replies -->
+
+        <div *ngFor='let reply of displayrepliesOfShare.replies'>
+            <p style="margin-top: 30px;"><span [routerLink]="['/profile', reply.commentor._id]" class="btn" style="color: rgb(61, 137, 236);">{{reply.commentor.username}} :</span> {{reply.content}}</p><br>
+            <p class="date">{{ stringAsDate(reply.createdAt) | date:'dd MM yy - HH:mm:ss' }}</p>
+            <div *ngIf='infoDisp[reply._id]' class="infdsplay">
+                <p>{{content}}</p>
+
+            </div>
+            <!-- Action box -->
+            <div (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('like', reply)"  style="display: inline-block; position: absolute; margin-left: 200px;" >
+                <span (click)="onclickLikeReply(displayrepliesOfShare, reply)" class="btn"><i class="fa fa-heart blue"></i> </span><span (click)="displayWhoLikes(reply)"style="margin-left: 10px; color: blue;" class="btn">{{reply.likes.length}} likes</span>
+                <span *ngFor='let like of reply.likes'><i *ngIf='like._id === user._id' class="fa fa-heart red btn" style="position: absolute; margin-left:-127px; z-index: 5;" (click)="onclickLikeReply(displayrepliesOfShare, reply)"></i></span>
+            </div>
+            <div *ngIf="user._id === reply.commentor._id" (click)="deleteReply(displayrepliesOfShare, reply)"  style="display: inline-block; position: absolute; margin-left: 350px;" (mouseleave)="displayMea()" (mouseenter) ="displayMeaning('delete', reply)" >
+                <p> <span class="btn" ><i class="fa fa-trash" style="color: rgb(53, 85, 121);"></i></span></p>
+            </div>
+
+            <div style="border: 1px solid rgb(163, 162, 162); margin-top: 110px; width: 440px; margin-left: -50px;"></div>
+        </div>
+        
+    </div>
+
+</div>
+
+<!-- Likes display  -->
+
+<div *ngIf="wholeLikes" class="modal1">
+        <span  (click)="removeLikesBox()" style="font-size: 40px; margin-left: 900px; position: fixed; margin-top: -20px;"><i class="fa fa-close"></i></span>
+       <div *ngIf="user" class="modal-content1" style="min-height: 500px; padding-left: 50px; padding-top: 30px; padding-bottom: 100px; background: rgb(207, 232, 241); border-bottom: 1px solid rgb(199, 195, 195); border-top: 1px solid rgb(199, 195, 195);  margin-top: 5px;  padding-right: 30px;  margin-left: 350px; z-index: 5;" >
+            <div *ngFor='let liker of wholeLikes.likes'>
+                <div style="border-top: 1px solid rgb(53, 53, 53); border-bottom: 1px solid rgb(53, 53, 53); padding-top: 20px; padding-bottom: 20px;">
+                        <div  [routerLink]="['/profile', liker._id]" style=" width: 30px; height: 30px; display: inline-block; margin-top: 30px; position: absolute;">
+                        <img *ngIf='!liker.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994" class="avatar img-circle" alt="avatar">
+                        <img *ngIf='liker.ProfilePhoto' style=" width:30px; height: 30px; display: inline-block; margin-top: -40px;" src="{{liker.ProfilePhoto}}" class="avatar img-circle" alt="avatar">
+                    </div>
+                    <h3  style="font-size: 15px; color: rgb(19, 18, 18);  margin-left: 50px; font-weight: bold; " [routerLink]="['/profile', liker._id]">{{liker.username}}</h3>
+                    <div *ngIf='user._id != liker._id'>
+                            <span *ngIf="!liker.followers.includes(user._id)" class="btn"  style="position: absolute; margin-top: -40px; margin-left: 350px; z-index: 5;"><i (click)="onclickletsFollow1(liker, wholeLikes)">  Follow</i> </span>
+                            <span *ngIf="liker.followers.includes(user._id)" class="btn" style="position: absolute; margin-top: -40px; margin-left: 350px; background: rgb(178, 243, 178); z-index: 5;"> <i (click)="onclickletsUnfollow1(liker, wholeLikes)">  Following</i></span>
+                </div>
+                </div>
+                
+            </div>    
+           
+       </div>
+</div>

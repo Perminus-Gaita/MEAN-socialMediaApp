@@ -1,0 +1,21 @@
+<div class="container-a">
+  <div class="text-center">
+    <form class="form-signin" (submit)="onRegisterSubmit()">
+      
+      <h1 class="h3 mb-3 font-weight-normal">Please join us</h1>
+      <input  name="first_name" [(ngModel)]="first_name" class="inputs" placeholder="First Name" required autofocus><br><br>
+      <input  name="last_name" [(ngModel)]="last_name" class="inputs" placeholder="Last Name" required autofocus><br><br>
+      <input name="email" [(ngModel)]="email" class="inputs" placeholder="Email address" required autofocus><br><br>
+      <input name="username" [(ngModel)]="username" class="inputs" placeholder="Username" required autofocus><br><br>
+      <input type="password" name="password" [(ngModel)]="password" class="inputs"  placeholder="Password" required><br><br>
+      <input type="password" name="password_confirmation" [(ngModel)]="password_confirmation"class="inputs" placeholder="Confirm Password" required><br><br>
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+      
+    </form>
+  </div>
+</div>

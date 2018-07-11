@@ -1,0 +1,3 @@
+[submodule "interact"]
+	path = interact
+	url = https://gitlab.com/hizir.aslan/interact.git

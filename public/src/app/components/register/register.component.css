@@ -1,0 +1,9 @@
+.container-a{
+    width: 400px;
+    height: 500px;
+    padding-top: 40px;
+    margin-left: 400px;
+    border-radius: 10px;
+    box-shadow: 1px 1px rgb(198, 193, 193);
+    background: rgb(230, 224, 224);
+}
