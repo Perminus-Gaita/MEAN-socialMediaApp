@@ -11,7 +11,7 @@ var server = http.createServer(app);
 
 
 const config = require('./server/config/mongoose.js');
-mongoose.connect('mongodb://hizir:19201920hs@ds231951.mlab.com:31951/auth2_database');
+mongoose.connect('mongodb://hizir:19201920hs@ds231951.mlab.com:31951/auth2_database', { useNewUrlParser: true });
 mongoose.connection.on('connected', ()=>{
 
 })
