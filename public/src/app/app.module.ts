@@ -90,7 +90,7 @@ import { DiscoverComponent } from './components/discover/discover.component';
     AngularFireAuthModule,
     AngularFireStorageModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyC5yxF7c5kP2bXKORcPbRHHCDIcwHuFERI'
+      apiKey: ''
     })
    
   ],
