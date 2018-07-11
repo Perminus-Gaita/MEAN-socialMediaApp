@@ -42,6 +42,5 @@ require('./server/config/passport')(passport)
 app.all("*", (req,res,next) => {
     res.sendFile(path.resolve("static/index.html"))
   })
- app.listen(4000, function() {
-    console.log("listening on port 4000");
-})
+  var port_number = server.listen(process.env.PORT || 3000);
+  app.listen(port_number);
