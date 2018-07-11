@@ -11,9 +11,9 @@ var server = http.createServer(app);
 
 
 const config = require('./server/config/mongoose.js');
-mongoose.connect(config.mongoose);
+mongoose.connect('mongodb://hizir:19201920hs@ds231951.mlab.com:31951/auth2_database');
 mongoose.connection.on('connected', ()=>{
-   
+
 })
 const flash = require('express-flash');
 const cors = require('cors');
