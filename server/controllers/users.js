@@ -55,8 +55,8 @@ module.exports = {
                                 port: 465,
                                 secure: true, // true for 465, false for other ports
                                 auth: {
-                                    user: 'hzraslan1@gmail.com', // generated ethereal user
-                                    pass: '19201920hhs'// generated ethereal password
+                                    user: '', // generated ethereal user
+                                    pass: ''// generated ethereal password
                                 }
                             });
                             const url = 'http://localhost:4000/user/'+user._id+'/emailconfirmation'
