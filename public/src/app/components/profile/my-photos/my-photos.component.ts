@@ -32,7 +32,7 @@ export class MyPhotosComponent implements OnInit {
   img:any;
 
   constructor(private _router: Router,
-    private _route: ActivatedRoute, private _httpService: HttpService, 
+    private _route: ActivatedRoute, private _httpService: HttpService,
     private _authService: AuthService,
     private _flashMessagesService: FlashMessagesService,
     private _usersService: UsersService,
@@ -49,25 +49,25 @@ export class MyPhotosComponent implements OnInit {
     this._authService.getProfile().subscribe(profile =>{
       this.user = profile['user'];
       console.log(this.user)
-   
+
     },
     err =>{
       return false;
     });
-   
+
   }
   onFileSelected(event){
     this.picture = event.target.files[0];
     let file = this.picture;
-        
+
     let name = "Profile picture"+ Date.now();
     var uploadpic = this._storage.upload(name, file)
     .then((data) =>{
       data.ref.getDownloadURL().then((url)=>{
         this.newUrl = url;
-        
+
         this.img= name;
-       
+
       })
     })
   }
@@ -93,21 +93,21 @@ export class MyPhotosComponent implements OnInit {
               this.makeAvatar(this.user.pictures[this.user.pictures.length-1]);
             }
           }
-          
-        });
 
+        });
+        this.newUrl = null;
   }
   getUserFromService(){
     this._route.params.subscribe((params : Params)=>{
       this.id = params['id']
       this._usersService.getanUser(this.id).subscribe(data=> {
         this.user1 = data['user'];
-        
+
         // this.display(this.user1);
       });
     })
   }
- 
+
   // display(user){
   //   if(user.pictures.length ===0){
   //     return this.displayPhoto = "https://firebasestorage.googleapis.com/v0/b/digmypast-cc2a9.appspot.com/o/Screen%20Shot%202018-06-10%20at%208.37.57%20PM.png?alt=media&token=d887cc05-bb1a-4bca-8910-6b6f73b22994"
@@ -126,7 +126,7 @@ export class MyPhotosComponent implements OnInit {
   //   }
   // }
   removeImg(picture){
-    
+
       this.deleteFileStorage(picture.img);
       if(picture.url === this.user1.ProfilePhoto && this.user1.pictures.length< 2){
         let observable = this._usersService.deleteImg(this.user1._id, picture)
@@ -162,6 +162,6 @@ export class MyPhotosComponent implements OnInit {
     const storageRef = firebase.storage().ref();
     storageRef.child(`${this.basePath}/${name}`).delete();
   }
-  
+
 
 }

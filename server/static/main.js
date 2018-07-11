@@ -2897,6 +2897,7 @@ var MyPhotosComponent = /** @class */ (function () {
                 }
             }
         });
+        this.newUrl = null;
     };
     MyPhotosComponent.prototype.getUserFromService = function () {
         var _this = this;
